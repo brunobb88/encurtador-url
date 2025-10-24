@@ -1,5 +1,22 @@
-# Pasta de Dados
+# 🔗 Encurtador de URL
 
-Esta pasta armazena o arquivo JSON com as URLs encurtadas.
+Meu primeiro projeto Full-Stack deployado! Um encurtador de URLs funcional.
 
-- `urls.json`: Banco de dados das URLs
+## 🌐 **DEMO ONLINE**
+**[🔗 ACESSE AQUI: https://encurtador-url-syan.onrender.com](https://encurtador-url-syan.onrender.com)**
+
+## 🚀 Funcionalidades
+- Encurtamento de URLs em tempo real
+- Redirecionamento automático
+- Interface moderna e responsiva
+- Deploy profissional na nuvem
+
+## 🛠️ Tecnologias
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Backend:** Node.js, Express
+- **Deploy:** Render.com
+- **Versionamento:** GitHub
+
+---
+
+*Desenvolvido como parte da minha jornada para me tornar desenvolvedor Full-Stack!*
