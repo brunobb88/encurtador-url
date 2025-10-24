@@ -4,7 +4,9 @@ const resultadoElement = document.getElementById('resultado');
 const urlEncurtadaElement = document.getElementById('url-encurtada');
 const erroElement = document.getElementById('erro');
 
-// ✅ ENCURTAR URL
+// ✅ 🔥 CORREÇÃO: URL dinâmica
+const API_BASE = window.location.origin;
+
 urlForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -15,8 +17,16 @@ urlForm.addEventListener('submit', async (e) => {
         return;
     }
     
+    // Validação básica
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        mostrarErro('Por favor, inclua http:// ou https://');
+        return;
+    }
+    
     try {
-        const response = await fetch('/encurtar', {
+        console.log('🔄 Enviando para:', `${API_BASE}/encurtar`);
+        
+        const response = await fetch(`${API_BASE}/encurtar`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,14 +34,20 @@ urlForm.addEventListener('submit', async (e) => {
             body: JSON.stringify({ urlOriginal: url })
         });
         
+        console.log('📊 Status:', response.status);
+        
         if (!response.ok) {
-            throw new Error('Erro ao encurtar URL');
+            const errorData = await response.json();
+            throw new Error(errorData.erro || 'Erro no servidor');
         }
         
         const data = await response.json();
+        console.log('✅ Sucesso:', data);
+        
         mostrarResultado(data);
         
     } catch (error) {
+        console.error('❌ Erro completo:', error);
         mostrarErro('Erro: ' + error.message);
     }
 });
