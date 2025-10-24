@@ -4,11 +4,23 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ✅ CONFIGURAÇÃO BÁSICA
+// ✅ 🔥 CORREÇÃO: CORS PARA PRODUÇÃO
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept');
+    
+    // Responde imediatamente para requisições OPTIONS
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 app.use(express.json());
 app.use(express.static('public'));
 
-// ✅ ROTA DE TESTE - SIMPLES E FUNCIONAL
+// ✅ ROTA DE TESTE
 app.get('/api/teste', (req, res) => {
     console.log('✅ Rota /api/teste acessada');
     res.json({ 
@@ -24,10 +36,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ✅ BANCO DE DADOS SIMPLES
+// ✅ BANCO DE DADOS
 const urlDatabase = {};
 
-// ✅ ROTA PARA ENCURTAR URL
+// ✅ ENCURTAR URL
 app.post('/api/encurtar', (req, res) => {
     console.log('📨 Recebendo requisição para encurtar URL');
     
@@ -38,16 +50,13 @@ app.post('/api/encurtar', (req, res) => {
             return res.status(400).json({ erro: 'URL é obrigatória' });
         }
 
-        // Gera um ID único
         const id = Math.random().toString(36).substring(2, 8);
         const urlBase = `https://${req.get('host')}`;
         
-        // Salva a URL
         urlDatabase[id] = urlOriginal;
         
         console.log('✅ URL encurtada criada:', id);
         
-        // Resposta de sucesso
         res.json({
             success: true,
             urlEncurtada: `${urlBase}/${id}`,
@@ -60,7 +69,7 @@ app.post('/api/encurtar', (req, res) => {
     }
 });
 
-// ✅ ROTA DE REDIRECIONAMENTO
+// ✅ REDIRECIONAMENTO
 app.get('/:id', (req, res) => {
     const { id } = req.params;
     console.log('🔄 Tentando redirecionar:', id);
@@ -76,7 +85,7 @@ app.get('/:id', (req, res) => {
     }
 });
 
-// ✅ INICIAR SERVIDOR
+// ✅ INICIAR
 app.listen(PORT, () => {
     console.log('===================================');
     console.log('🚀 SERVIDOR INICIADO COM SUCESSO!');
